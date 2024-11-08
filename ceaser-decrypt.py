@@ -1,15 +1,15 @@
 def decrypt(key, message):
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     result = ""
-    
+        
     for letter in message:
-        if letter in alpha:
-            num = alpha.find(letter)
+        if letter in alpha.lower():
+            num = alpha.lower().find(letter)
             new_num = (num - key) % len(alpha)
             result += alpha[new_num]
         else:
             result += letter
-    return result
+    print(result)
 
 def main() -> None:
     try:   
@@ -43,7 +43,7 @@ def main() -> None:
         decrypted_value = decrypt(int(key), encrypted)
         
         print(decrypted_value)        
-        return decrypted_value
+        # return decrypted_value
     except KeyboardInterrupt:
         print("Program terminated")
     except ValueError as e:
@@ -54,7 +54,6 @@ def main() -> None:
         print("Error: ", e) 
     finally:
         encrypted_file.close()
-        print("End of program")
     
     return None
 
