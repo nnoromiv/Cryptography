@@ -1,4 +1,12 @@
 def brute_force(message):
+    """
+    The function `brute_force` attempts to decrypt a message by trying all possible Caesar cipher
+    shifts.
+    
+    :param message: The `brute_force` function you provided is a simple Caesar cipher decryption
+    algorithm that tries all possible shifts to decrypt a message. When you input a message, the
+    function will attempt to decrypt it using all 26 possible shifts and print out the results
+    """
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     message = message.upper()
     

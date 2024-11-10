@@ -1,4 +1,13 @@
 def decrypt(key, message):
+    """
+    The function decrypts a message using a given key by shifting the letters in the message backwards
+    in the alphabet.
+    
+    :param key: The `key` parameter in the `decrypt` function is an integer representing the shift value
+    used in a Caesar cipher for decrypting a message
+    :param message: Thank you for providing the code snippet. Could you please also provide the message
+    that needs to be decrypted?
+    """
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     result = ""
         
