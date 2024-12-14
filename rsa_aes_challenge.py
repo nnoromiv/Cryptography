@@ -1,3 +1,4 @@
+from Crypto.Util.Padding import pad, unpad
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP, AES
 from Crypto.Signature import pkcs1_15
@@ -94,14 +95,16 @@ class Communication:
     encrypted_seed = cipher_rsa.encrypt(seed)
     print("Sender has encrypted the AES session key.")
     
-    # Step 3: Sender encrypts a message using AES
+    # Step 3: Sender encrypts a message using AES in CBC mode
     message = input("Sender's Message: ").encode('utf-8')
+    information_validator = get_random_bytes(16)
     # MODE_GCM Has a block size of 128 bits 
-    cipher_aes = AES.new(aes_key, AES.MODE_GCM)
-    cipher_text, tag = cipher_aes.encrypt_and_digest(message)
-    nonce = cipher_aes.nonce
-    print("Message encrypted and sent.")
-
+    cipher_aes = AES.new(aes_key, AES.MODE_CBC, information_validator)
+    padded_message = pad(message, AES.block_size)
+    cipher_text = cipher_aes.encrypt(padded_message)
+    print("Message encrypted and sent  using AES-CBC.")
+    
+    
     # Step 4: Recipient decrypts the AES session key
     cipher_rsa = PKCS1_OAEP.new(recipient_private_key)
     decrypted_seed = cipher_rsa.decrypt(encrypted_seed)
@@ -110,9 +113,11 @@ class Communication:
 
 
     # Step 5: Recipient decrypts the message
-    cipher_aes = AES.new(decrypted_aes_key, AES.MODE_GCM, nonce=nonce)
-    decrypted_message = cipher_aes.decrypt_and_verify(cipher_text, tag)
-    print(f"Message decrypted by Recipient. {decrypted_message.decode('utf-8')}")
+    cipher_aes = AES.new(decrypted_aes_key, AES.MODE_CBC, information_validator)
+    padded_decrypted_message = cipher_aes.decrypt(cipher_text)
+    decrypted_message = unpad(padded_decrypted_message, AES.block_size)
+    print(f"Message decrypted by Recipient. {decrypted_message.decode('utf-8')} using AES-CBC.")
+
     
     print("Authenticating message....")
 
